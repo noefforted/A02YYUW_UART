@@ -3,6 +3,7 @@
 A02YYUW::A02YYUW(SoftwareSerial *serial)
 {
     this->serial = serial;
+    distance = 0.0;
 }
 
 void A02YYUW::start()
@@ -18,20 +19,22 @@ void A02YYUW::run()
         {
             data[i] = serial->read();
         }
-        Serial.print("HEADER: ");
-        Serial.println(data[0]);
-
-        Serial.print("DATA_H: ");
-        Serial.println(data[1]);
-
-        Serial.print("DATA_L: ");
-        Serial.println(data[2]);
-
-        Serial.print("SUM: ");
-        Serial.println(data[3]);
     } while (serial->read() == 0xff);
 
     serial->flush();
+
+    Serial.print("HEADER: ");
+    Serial.println(data[0]);
+
+    Serial.print("DATA_H: ");
+    Serial.println(data[1]);
+
+    Serial.print("DATA_L: ");
+    Serial.println(data[2]);
+
+    Serial.print("SUM: ");
+    Serial.println(data[3]);
+
     if (data[0] == 0xff)
     {
         int sum;
