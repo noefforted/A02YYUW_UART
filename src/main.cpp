@@ -1,13 +1,14 @@
 #include <Arduino.h>
 #include "A02YYUW.h"
+#include <SoftwareSerial.h>
 
-A02YYUW sensor(&Serial);
+SoftwareSerial mySerial(11,10);
+A02YYUW sensor(&mySerial);
 
 void setup()
 {
     Serial.begin(57600);
-    Serial.begin(9600);
-    sensor.begin();
+    sensor.start();
     Serial.println("A02YYUW Sensor Initialized");
 }
 
@@ -15,7 +16,6 @@ void loop()
 {
     sensor.run();
     float distance = sensor.getDistance();
-    Serial.println(distance);
     if (distance > 30)
     {
         Serial.print("Jarak: ");
@@ -26,5 +26,5 @@ void loop()
     {
         Serial.println("Jarak terlalu dekat");
     }
-    delay(500);
+    delay(1000);
 }

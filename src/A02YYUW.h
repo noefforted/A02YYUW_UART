@@ -2,19 +2,20 @@
 #define A02YYUW_H
 
 #include <Arduino.h>
+#include <SoftwareSerial.h>
 
 class A02YYUW
 {
 public:
-    A02YYUW(HardwareSerial *serial); 
-    void begin();                    
+    A02YYUW(SoftwareSerial *serial); 
+    void start();                    
     void run();                    
     float getDistance();              
 
 private:
-    HardwareSerial *serial;          
+    SoftwareSerial *serial;          
     float distance;                   
-    unsigned char data[4];            
+    unsigned char data[4]={};            
 };
 
 #endif
