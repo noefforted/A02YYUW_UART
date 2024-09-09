@@ -26,5 +26,5 @@ void loop()
     {
         Serial.println("Jarak terlalu dekat");
     }
-    delay(1000);
+    delay(100);
 }

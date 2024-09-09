@@ -13,32 +13,52 @@ void A02YYUW::start()
 
 void A02YYUW::run()
 {
-    do
+    // Membaca data dari sensor
+    for (int i = 0; i < 4; i++)
     {
-        for (int i = 0; i < 4; i++)
-        {
-            data[i] = serial->read();
-        }
-    } while (serial->read() == 0xff);
+        data[i] = serial->read();
+    }
 
+    // Flush untuk membersihkan buffer serial setelah pembacaan
     serial->flush();
 
-    Serial.print("HEADER: ");
-    Serial.println(data[0]);
+    // Deteksi posisi 0xff dan rotasi data jika perlu
+    for (int i = 0; i < 4; i++)
+    {
+        if (data[i] == 0xff)
+        {
+            // Rotasi array sehingga 0xff selalu di data[0]
+            while (i != 0)
+            {
+                uint8_t temp = data[0];
+                for (int j = 0; j < 3; j++)
+                {
+                    data[j] = data[j + 1];
+                }
+                data[3] = temp;
+                i--;
+            }
+            break;
+        }
+    }
 
-    Serial.print("DATA_H: ");
-    Serial.println(data[1]);
+    // Menampilkan data
+    // Serial.print("HEADER: ");
+    // Serial.println(data[0]);
 
-    Serial.print("DATA_L: ");
-    Serial.println(data[2]);
+    // Serial.print("DATA_H: ");
+    // Serial.println(data[1]);
 
-    Serial.print("SUM: ");
-    Serial.println(data[3]);
+    // Serial.print("DATA_L: ");
+    // Serial.println(data[2]);
 
+    // Serial.print("SUM: ");
+    // Serial.println(data[3]);
+
+    // Validasi checksum dan hitung jarak
     if (data[0] == 0xff)
     {
-        int sum;
-        sum = (data[0] + data[1] + data[2]) & 0x00FF;
+        int sum = (data[0] + data[1] + data[2]) & 0x00FF;
         if (sum == data[3])
         {
             distance = (data[1] << 8) + data[2];
@@ -47,6 +67,10 @@ void A02YYUW::run()
         {
             Serial.println("Checksum ERROR");
         }
+    }
+    else
+    {
+        Serial.println("Invalid Header");
     }
 }
 

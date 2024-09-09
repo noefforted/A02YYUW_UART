@@ -15,7 +15,7 @@ public:
 private:
     SoftwareSerial *serial;          
     float distance;                   
-    unsigned char data[4];            
+    unsigned char data[4]={};            
 };
 
 #endif
